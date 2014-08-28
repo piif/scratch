@@ -10,15 +10,40 @@ new (function() {
         return {status: 2, msg: 'Ready'};
     };
 
-    ext.my_first_block = function() {
-        // Code that gets executed when the block is run
+    ext.get_42 = function(callback) {
+        // Make an AJAX call to the Open Weather Maps API
+        $.ajax({
+              url: 'http://localhost/scratch/42.php',
+              dataType: 'text',
+              success: function( data ) {
+                  callback(data);
+              }
+        });
+    };
+
+    ext.set_alarm = function(time) {
+       window.setTimeout(function() {
+           alarm_went_off = true;
+       }, time*1000);
+    };
+
+    ext.when_alarm = function() {
+       // Reset alarm_went_off if it is true, and return true
+       // otherwise, return false.
+       if (alarm_went_off === true) {
+           alarm_went_off = false;
+           return true;
+       }
+
+       return false;
     };
 
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-            // Block type, block name, function name
-            [' ', 'my first block', 'my_first_block'],
+            ['', 'run alarm after %n seconds', 'set_alarm', '2'],
+            ['h', 'when alarm goes off', 'when_alarm'],
+            ['R', 'LA reponse', 'get_42'],
         ]
     };
 
